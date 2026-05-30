@@ -8,9 +8,8 @@ TBFLAGS = ( wx.LI_VERTICAL
 
 
 class TestToolBar(wx.Frame):
-    def __init__(self, parent, log):
+    def __init__(self, parent):
         wx.Frame.__init__(self, parent, -1, 'Test ToolBar', size=(600, 400))
-        self.log = log
         self.timer = None
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -41,7 +40,6 @@ class ConsoleLogger:
 
 if __name__ == '__main__':
     app = wx.App()
-    logger = ConsoleLogger()
-    panel = TestToolBar(None, logger)
+    panel = TestToolBar(None)
     panel.Show()
     app.MainLoop()
