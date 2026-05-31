@@ -1,7 +1,6 @@
 import wx 
 
-FRAMETB = True
-TBFLAGS = ( wx.LI_VERTICAL
+TBFLAGS = ( wx.TB_HORIZONTAL
             | wx.NO_BORDER
             | wx.TB_FLAT
             )
@@ -9,37 +8,36 @@ TBFLAGS = ( wx.LI_VERTICAL
 
 class TestToolBar(wx.Frame):
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent, -1, 'Test ToolBar', size=(600, 400))
-        self.timer = None
+        super().__init__(parent, title="tittle", size=(600, 400))
+        
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         client = wx.Panel(self)
         client.SetBackgroundColour(wx.WHITE)
 
-        if FRAMETB:
-            tb = self.CreateToolBar( TBFLAGS )
-        else:
-            tb = wx.ToolBar(client, style=TBFLAGS)
-            sizer = wx.BoxSizer(wx.VERTICAL)
-            sizer.Add(tb, 0, wx.EXPAND)
-            client.SetSizer(sizer)
+        
 
+        tb = wx.ToolBar(client, style=TBFLAGS)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(tb, 0, wx.EXPAND)
+
+        t1 = wx.TextCtrl(client, -1, "Mensaje", size=(125, -1))
+        sizer.Add(t1, 0, wx.EXPAND)
+        
+        client.SetSizer(sizer)
+
+        
+        
+
+        
     def OnCloseWindow(self, event):
-        if self.timer is not None:
-            self.timer.Stop()
-            self.timer = None
-        self.Destroy()
+        self.Destroy()       
 
-
-class ConsoleLogger:
-    def write(self, text):
-        print(text, end="")
-    def WriteText(self, text):
-        print(text, end="")
 
 
 if __name__ == '__main__':
     app = wx.App()
     panel = TestToolBar(None)
+    panel.Center()
     panel.Show()
     app.MainLoop()
