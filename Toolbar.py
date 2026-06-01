@@ -33,7 +33,7 @@ class MainFrame(wx.Frame):
         splitter.SetMinimumPaneSize(50)  
         
         
-        splitter.SplitVertically(p1, p2, -100)
+        splitter.SplitVertically(p1, p2, 180)
 
         self.CreateToolBar(TBFLAGS)
 
@@ -51,6 +51,7 @@ class MainFrame(wx.Frame):
         mensaje_enviar =  wx.TextCtrl(p2, 0, "Mensaje", size=(125, -1))
         sizer.Add(mensajes_recibidos, 1, wx.EXPAND)
         sizer.Add(mensaje_enviar, 0, wx.EXPAND)
+        
     
     def OnCloseWindow(self, event):
         self.Destroy()       
