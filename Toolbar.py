@@ -21,8 +21,8 @@ class MainFrame(wx.Frame):
         #un punto default de tamaño para que se abra en una vista comoda y un tamaño minimo de panel
         splitter = MySplitter(self)
         sty = wx.BORDER_SUNKEN
-        p1 = wx.Window(splitter, style=sty)
-        p2 = wx.Window(splitter, style=sty)
+        p1 = wx.Panel(splitter, style=sty)
+        p2 = wx.Panel(splitter, style=sty)
         splitter.SetMinimumPaneSize(50)  
         splitter.SplitVertically(p1, p2, 180)
         
@@ -32,27 +32,42 @@ class MainFrame(wx.Frame):
 
         
         #Texto estatico para señalar puntos
-        contacto_lista = wx.StaticText(p1, -1, "Lista de Contactos", (10, 10))
-        contacto_actual = wx.StaticText(p2, -1, "Contacto actual", (10, 10))
+        contacto_lista = wx.StaticText(p1, -1, "Lista de Contactos")
+        
 
 
         #Creo la toolbar para elementos esenciales
-        self.CreateToolBar(TBFLAGS)
+        toolbar = self.CreateToolBar(TBFLAGS)
+        imagen_contacto_original = wx.Image(r"D:\Proyectos\Python\iconos\images-removebg-preview.png", wx.BITMAP_TYPE_ANY)
+        imagen_contacto_Redimensionada = imagen_contacto_original.Scale(24, 24, wx.IMAGE_QUALITY_HIGH)
+        toolbar.AddTool(-1, "Agregar", wx.Bitmap(imagen_contacto_Redimensionada), shortHelp="Agregar contacto")
+        
+        imagen_basura_original = wx.Image(r"D:\Proyectos\Python\iconos\png-transparent-rubbish-bins-waste-paper-baskets-recycling-bin-computer-icons-others-miscellaneous-text-rectangle.png")
+        imagen_basura_Redimensionada = imagen_basura_original.Scale(24, 24, wx.IMAGE_QUALITY_HIGH)
+        toolbar.AddTool(-1, "Eliminar", wx.Bitmap(imagen_basura_Redimensionada), shortHelp="eliminar contacto actual")
+        toolbar.Realize()
 
         #Creo contenedores para poder ordenar de mejor manera los elementos que voy a ingresar
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(contacto_actual, 0, wx.ALIGN_CENTER)
-        mensajes_recibidos = wx.TextCtrl(p2, -1, value="Mensaje recibido",  size=(125, -1), style=wx.TE_READONLY)
-        mensaje_enviar =  wx.TextCtrl(p2, 0, size=(125, -1))
+        contacto_actual = wx.StaticText(p2, -1, "Contacto actual")
+        mensajes_recibidos = wx.TextCtrl(p2, -1, value="Mensaje recibido", style=wx.TE_READONLY | wx.TE_MULTILINE)
+        mensaje_enviar =  wx.TextCtrl(p2, -1)
         mensaje_enviar.SetHint("Escriba su mensaje...")
+        sizer.Add(contacto_actual, 0, wx.ALIGN_CENTER)
         sizer.Add(mensajes_recibidos, 1, wx.EXPAND)
         sizer.Add(mensaje_enviar, 0, wx.EXPAND)
-        p2.SetSizer(sizer)
+        
 
 
         sizer2 = wx.BoxSizer(wx.VERTICAL)
-        p1.SetSizer(sizer2)
         sizer2.Add(contacto_lista, 0, wx.ALIGN_CENTER)
+
+        p1.SetSizer(sizer2)
+        p2.SetSizer(sizer)
+        p1.Layout()
+        p2.Layout()
+        splitter.Layout()
+        self.Layout()
 
         
  
