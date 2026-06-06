@@ -45,13 +45,17 @@ class MainFrame(wx.Frame):
 
         #Creo la toolbar para elementos esenciales
         toolbar = self.CreateToolBar(TBFLAGS)
-        imagen_contacto_original = wx.Image(r"D:\Proyectos\Python\iconos\images-removebg-preview.png", wx.BITMAP_TYPE_ANY)
-        imagen_contacto_Redimensionada = imagen_contacto_original.Scale(24, 24, wx.IMAGE_QUALITY_HIGH)
-        toolbar.AddTool(-1, "Agregar", wx.Bitmap(imagen_contacto_Redimensionada), shortHelp="Agregar contacto")
-        
-        imagen_basura_original = wx.Image(r"D:\Proyectos\Python\iconos\png-transparent-rubbish-bins-waste-paper-baskets-recycling-bin-computer-icons-others-miscellaneous-text-rectangle.png")
-        imagen_basura_Redimensionada = imagen_basura_original.Scale(24, 24, wx.IMAGE_QUALITY_HIGH)
-        toolbar.AddTool(-1, "Eliminar", wx.Bitmap(imagen_basura_Redimensionada), shortHelp="eliminar contacto actual")
+        try: 
+             
+            imagen_contacto_original = wx.Image(r"D:\Proyectos\Python\iconos\images-removebg-preview.png", wx.BITMAP_TYPE_ANY)
+            imagen_contacto_Redimensionada = imagen_contacto_original.Scale(24, 24, wx.IMAGE_QUALITY_HIGH)
+            toolbar.AddTool(-1, "Agregar", wx.Bitmap(imagen_contacto_Redimensionada), shortHelp="Agregar contacto")
+            
+            imagen_basura_original = wx.Image(r"D:\Proyectos\Python\iconos\png-transparent-rubbish-bins-waste-paper-baskets-recycling-bin-computer-icons-others-miscellaneous-text-rectangle.png")
+            imagen_basura_Redimensionada = imagen_basura_original.Scale(24, 24, wx.IMAGE_QUALITY_HIGH)
+            toolbar.AddTool(-1, "Eliminar", wx.Bitmap(imagen_basura_Redimensionada), shortHelp="eliminar contacto actual")
+        except Exception as e: 
+             toolbar.AddTool(wx.ID_ANY, "Agregar", wx.ArtProvider.GetBitmap(wx.ART_PLUS, wx.ART_TOOLBAR))
         toolbar.Realize()
 
         #Creo contenedores para poder ordenar de mejor manera los elementos que voy a ingresar
