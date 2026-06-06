@@ -1,4 +1,5 @@
 import wx 
+import websockets as ws
 
 TBFLAGS = ( wx.TB_HORIZONTAL
             | wx.NO_BORDER
@@ -50,12 +51,14 @@ class MainFrame(wx.Frame):
         #Creo contenedores para poder ordenar de mejor manera los elementos que voy a ingresar
         sizer = wx.BoxSizer(wx.VERTICAL)
         contacto_actual = wx.StaticText(p2, -1, "Contacto actual")
-        mensajes_recibidos = wx.TextCtrl(p2, -1, value="Mensaje recibido", style=wx.TE_READONLY | wx.TE_MULTILINE)
-        mensaje_enviar =  wx.TextCtrl(p2, -1)
-        mensaje_enviar.SetHint("Escriba su mensaje...")
+        self.mensajes_recibidos = wx.TextCtrl(p2, -1, value="", style=wx.TE_READONLY | wx.TE_MULTILINE)
+        self.mensaje_enviar =  wx.TextCtrl(p2, -1, style=wx.TE_PROCESS_ENTER)
+        self.mensaje_enviar.Bind(wx.EVT_TEXT_ENTER, self.OnEnviar)
+        self.mensaje_enviar.SetHint("Escriba su mensaje...")
         sizer.Add(contacto_actual, 0, wx.ALIGN_CENTER)
-        sizer.Add(mensajes_recibidos, 1, wx.EXPAND)
-        sizer.Add(mensaje_enviar, 0, wx.EXPAND)
+        sizer.Add(self.mensajes_recibidos, 1, wx.EXPAND)
+        sizer.Add(self.mensaje_enviar, 0, wx.EXPAND)
+        
         
 
 
@@ -64,15 +67,23 @@ class MainFrame(wx.Frame):
 
         p1.SetSizer(sizer2)
         p2.SetSizer(sizer)
+
+        #Lo uso para refrescar las ventanas y que muestren informacion correctamente
         p1.Layout()
         p2.Layout()
         splitter.Layout()
         self.Layout()
 
-        
- 
-        
     
+
+    def OnEnviar(self, event):
+        texto = self.mensaje_enviar.GetValue()
+        if texto:
+            self.mensajes_recibidos.AppendText(f"Tu: {texto}\n")
+            self.mensaje_enviar.Clear()
+        
+
+
     #Creo un evento para que deje de ejecutarse luego de darle click al boton de cerrar, caso contrario seguira en segundo plano
     def OnCloseWindow(self, event):
         self.Destroy()       
