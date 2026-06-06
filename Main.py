@@ -1,5 +1,7 @@
 import wx 
 import websockets as ws
+import asyncio
+import threading
 
 TBFLAGS = ( wx.TB_HORIZONTAL
             | wx.NO_BORDER
@@ -17,6 +19,10 @@ class MainFrame(wx.Frame):
     def __init__(self):
         super().__init__(parent=None, title="Shovelware", size=(600, 400))
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        
+        self.ws_conexion = None 
+        self.loop_asyncio = None 
+
 
         #Agrego mi ventana dividido al mainframe, designo el estilo y una variable a cada mitad de la ventana, tambien agrego
         #un punto default de tamaño para que se abra en una vista comoda y un tamaño minimo de panel
@@ -74,16 +80,39 @@ class MainFrame(wx.Frame):
         splitter.Layout()
         self.Layout()
 
-    
+        self.hilo_red = threading.Thread(target=self.ArrancarBucleAsyncio, daemon=True)
+        self.hilo_red.start()
 
+    def ArrancarBucleAsyncio(self):
+        self.loop_asyncio = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop_asyncio)
+        self.loop_asyncio.run_until_complete(self.ConectarServidorWS())        
+
+    async def ConectarServidorWS(self):
+        url = "ws://192.168.1.40:6789"
+        try:
+                async with ws.connect(url) as websocket:
+                    self.ws_conexion = websocket
+                    wx.CallAfter(self.ActualizarHistorial, "[Conectado al servidor de chat]\n")
+                    
+                    
+                    async for msg in websocket:
+                        # Enviamos el mensaje recibido de forma segura a la interfaz 
+                        wx.CallAfter(self.ActualizarHistorial, f"Otro: {msg}\n")
+                        
+        except Exception as e:
+                wx.CallAfter(self.ActualizarHistorial, f"[Error de conexión: {e}]\n")
+
+    def ActualizarHistorial(self, texto):
+        #Método seguro ejecutado en el hilo principal para pintar el texto
+        self.mensajes_recibidos.AppendText(texto)   
     def OnEnviar(self, event):
         texto = self.mensaje_enviar.GetValue()
         if texto:
             self.mensajes_recibidos.AppendText(f"Tu: {texto}\n")
             self.mensaje_enviar.Clear()
+            asyncio.run_coroutine_threadsafe(self.ws_conexion.send(texto), self.loop_asyncio)
         
-
-
     #Creo un evento para que deje de ejecutarse luego de darle click al boton de cerrar, caso contrario seguira en segundo plano
     def OnCloseWindow(self, event):
         self.Destroy()       
