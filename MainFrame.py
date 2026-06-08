@@ -118,7 +118,7 @@ class MainFrame(wx.Frame):
         
         # Caja para escribir mensajes
         self.caja_escritura = wx.TextCtrl(panel, style=wx.TE_PROCESS_ENTER)
-        self.caja_escritura.SetHint("Escribe aquí y pulsa Enter...")
+        self.caja_escritura.SetHint("Escribi aca y pulsa Enter...")
         self.caja_escritura.Bind(wx.EVT_TEXT_ENTER, self.cuando_enviar_mensaje)
         organizador.Add(self.caja_escritura, 0, wx.EXPAND | wx.ALL, 5)
         
