@@ -133,14 +133,16 @@ class MainFrame(wx.Frame):
         menu2 = wx.Menu()
         menu1.Append(101, "Agregar contacto")
         menu1.Append(102, "Eliminar contacto")
+        menu2.Append(201, "Mostrar informacion")
         
         menuBar.Append(menu1, "&Contactos")
-        menuBar.Append(menu2, "&Informacion", wx.EVT_MENU)
+        menuBar.Append(menu2, "&Informacion")
         self.SetMenuBar(menuBar)
 
 
         self.Bind(wx.EVT_MENU, self.agregar_contacto, id=101)
         self.Bind(wx.EVT_MENU, self.eliminar_contacto, id=102)
+        self.Bind(wx.EVT_MENU, self.informacion, id=201)
     """
     def crear_toolbar(self):
         #Crea la barra de herramientas superior
