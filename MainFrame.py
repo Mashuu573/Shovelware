@@ -51,7 +51,7 @@ class MainFrame(wx.Frame):
         panel_izquierdo, panel_derecho = self.crear_paneles_divididos()
         self.crear_lista_contactos(panel_izquierdo)
         self.crear_area_chat(panel_derecho)
-        self.crear_toolbar()
+        self.crear_menu()
     
 
 
@@ -127,9 +127,21 @@ class MainFrame(wx.Frame):
 
 
 
+    def crear_menu(self):
+        menuBar = wx.MenuBar()
+        menu1 = wx.Menu()
+        menu2 = wx.Menu()
+        menu1.Append(101, "Agregar contacto")
+        menu1.Append(102, "Eliminar contacto")
+        
+        menuBar.Append(menu1, "&Contactos")
+        menuBar.Append(menu2, "&Informacion", wx.EVT_MENU)
+        self.SetMenuBar(menuBar)
 
 
-
+        self.Bind(wx.EVT_MENU, self.agregar_contacto, id=101)
+        self.Bind(wx.EVT_MENU, self.eliminar_contacto, id=102)
+    """
     def crear_toolbar(self):
         #Crea la barra de herramientas superior
         toolbar = self.CreateToolBar(ESTILO_TOOLBAR)
@@ -152,7 +164,7 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_TOOL, self.agregar_contacto, btn_agregar)
         self.Bind(wx.EVT_TOOL, self.eliminar_contacto, btn_eliminar)
         self.Bind(wx.EVT_TOOL, self.informacion, btn_informacion)
-    
+    """ 
 
 
 
