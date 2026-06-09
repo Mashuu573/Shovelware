@@ -1,9 +1,8 @@
 import wx 
 import red
 
-
 # Estilo de la barra de herramientas
-ESTILO_TOOLBAR = wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT
+ESTILO_TOOLBAR = wx.TB_VERTICAL | wx.NO_BORDER | wx.TB_FLAT
 
 # Clase principal
 class MainFrame(wx.Frame):
@@ -52,6 +51,7 @@ class MainFrame(wx.Frame):
         self.crear_lista_contactos(panel_izquierdo)
         self.crear_area_chat(panel_derecho)
         self.crear_menu()
+        self.crear_toolbar()
     
 
 
@@ -126,7 +126,6 @@ class MainFrame(wx.Frame):
     
 
 
-
     def crear_menu(self):
         menuBar = wx.MenuBar()
         menu1 = wx.Menu()
@@ -134,7 +133,6 @@ class MainFrame(wx.Frame):
         menu1.Append(101, "Agregar contacto")
         menu1.Append(102, "Eliminar contacto")
         menu2.Append(201, "Mostrar informacion")
-        
         menuBar.Append(menu1, "&Contactos")
         menuBar.Append(menu2, "&Informacion")
         self.SetMenuBar(menuBar)
@@ -143,7 +141,8 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.agregar_contacto, id=101)
         self.Bind(wx.EVT_MENU, self.eliminar_contacto, id=102)
         self.Bind(wx.EVT_MENU, self.informacion, id=201)
-    """
+    
+    
     def crear_toolbar(self):
         #Crea la barra de herramientas superior
         toolbar = self.CreateToolBar(ESTILO_TOOLBAR)
@@ -166,12 +165,8 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_TOOL, self.agregar_contacto, btn_agregar)
         self.Bind(wx.EVT_TOOL, self.eliminar_contacto, btn_eliminar)
         self.Bind(wx.EVT_TOOL, self.informacion, btn_informacion)
-    """ 
-
-
-
-
-
+ 
+        
     #Acciones del usuario
     def pedir_nombre_usuario(self):
         #Pide el nombre al iniciar el programa
