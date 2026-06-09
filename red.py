@@ -4,7 +4,7 @@ import websocket
 import wx
 
 # Dirección del servidor
-DIRECCION_SERVIDOR = "ws://192.168.1.40:6789"
+DIRECCION_SERVIDOR = "ws://10.22.222.50:6789"
 
 
 class Acciones_Red:
