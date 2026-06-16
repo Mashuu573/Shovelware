@@ -1,6 +1,6 @@
 import wx 
 import red
-
+import emoji
 # Estilo de la barra de herramientas
 ESTILO_TOOLBAR = wx.TB_VERTICAL | wx.NO_BORDER | wx.TB_FLAT
 
@@ -51,6 +51,8 @@ class MainFrame(wx.Frame):
         self.crear_lista_contactos(panel_izquierdo)
         self.crear_area_chat(panel_derecho)
         self.crear_menu()
+        self.crear_barra_estado()
+        self.iniciar_reloj()
         self.crear_toolbar()
     
 
@@ -125,14 +127,31 @@ class MainFrame(wx.Frame):
         panel.SetSizer(organizador)
     
 
+    def crear_barra_estado(self):
+        self.statusBar = self.CreateStatusBar(1)
+        self.statusBar.SetStatusText("Iniciando reloj...")
+    
+    def iniciar_reloj(self):
+        self.timer_reloj = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.actualizar_hora, self.timer_reloj)
+        self.timer_reloj.Start(1000)
+        self.actualizar_hora(None)
+
+    def actualizar_hora(self, event):
+        ahora = wx.DateTime.Now()
+        hora_formateada = ahora.Format("%H:%M:%S")
+        self.statusBar.SetStatusText(f"Hora actual: {hora_formateada}")
 
     def crear_menu(self):
         menuBar = wx.MenuBar()
         menu1 = wx.Menu()
         menu2 = wx.Menu()
+        menu3 = wx.Menu()
         menu1.Append(101, "Agregar contacto")
         menu1.Append(102, "Eliminar contacto")
         menu2.Append(201, "Mostrar informacion")
+        menu2.Append(203, "Mostrar lista emojis")
+        menu2.Append(202, "Acerca De")
         menuBar.Append(menu1, "&Contactos")
         menuBar.Append(menu2, "&Informacion")
         self.SetMenuBar(menuBar)
@@ -141,6 +160,8 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.agregar_contacto, id=101)
         self.Bind(wx.EVT_MENU, self.eliminar_contacto, id=102)
         self.Bind(wx.EVT_MENU, self.informacion, id=201)
+        self.Bind(wx.EVT_MENU, self.acercaDe, id=202)
+        self.Bind(wx.EVT_MENU, self.mostrarEmojiLista, id=203)
     
     
     def crear_toolbar(self):
@@ -158,6 +179,8 @@ class MainFrame(wx.Frame):
         # Boton informacion 
         icono_informacion = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_TOOLBAR)
         btn_informacion = toolbar.AddTool(-1, "Informacion", icono_informacion, "mostrar informacion")
+
+        
         
         toolbar.Realize()
         
@@ -269,8 +292,67 @@ class MainFrame(wx.Frame):
         wx.MessageBox("Desarrollado por Torres Mauricio Ezequiel." \
         "\nUniversidad Nacional de Pilar - 2026 - Programacion Orientada a Objetos", "Informacion")
 
+    def acercaDe(self, event):
+        wx.MessageBox("Se utilizo codigo de internet para poder crear la estructura de servidor y un poco de red, se utilizo : \n" \
+        "stackoverflow y Reddit, ademas de algunas consultas a la IA para ver enfoques de estructuras ")
 
-
+    def mostrarEmojiLista(self, event):
+        mensaje_lista = (
+            "EXPRESIONES Y CARAS:\n"
+            ":cara_sonriente_con_ojos_sonrientes: -> 😊\n"
+            ":cara_llorando_de_risa: -> 😂\n"
+            ":cara_guiñando_el_ojo: -> 😉\n"
+            ":cara_pensativa: -> 🤔\n"
+            ":cara_con_ojos_de_corazón: -> 😍\n"
+            ":cara_haciendo_un_guiño_y_mandando_un_beso: -> 😘\n"
+            ":cara_neutral: -> 😐\n"
+            ":cara_gritando_de_miedo: -> 😱\n"
+            ":cara_llorando_fuertemente: -> 😭\n"
+            ":cara_enojada: -> 😡\n"
+            ":cara_con_gafas_de_sol: -> 😎\n"
+            ":cara_durmiendo: -> 😴\n"
+            ":cara_alreves: -> 🙃\n\n"
+            
+            "GESTOS Y MANOS:\n"
+            ":pulgar_hacia_arriba: -> 👍\n"
+            ":pulgar_hacia_abajo: -> 👎\n"
+            ":manos_aplaudiendo: -> 👏\n"
+            ":mano_saludando: -> 👋\n"
+            ":manos_en_oración: -> 🙏\n"
+            ":mano_haciendo_el_signo_de_la_victoria: -> ✌️\n"
+            ":mano_con_gesto_de_bien: -> 👌\n\n"
+            
+            "CORAZONES Y SÍMBOLOS:\n"
+            ":corazón_rojo: -> ❤️\n"
+            ":corazón_roto: -> 💔\n"
+            ":corazón_azul: -> 💙\n"
+            ":corazón_verde: -> 💚\n"
+            ":corazón_brillante: -> 💖\n"
+            ":cien_puntos: -> 💯\n"
+            ":marca_de_verificación: -> ✅\n"
+            ":atención: -> ⚠️\n"
+            ":prohibido: -> 🚫\n\n"
+            
+            "EFECTOS Y ELEMENTOS:\n"
+            ":fuego: -> 🔥\n"
+            ":destellos: -> ✨\n"
+            ":colisión: -> 💥\n"
+            ":gotas_de_sudor: -> 💦\n"
+            ":viento: -> 💨\n\n"
+            
+            "OBJETOS Y TECNOLOGÍA:\n"
+            ":bocadillo_de_diálogo: -> 💬\n"
+            ":computadora_portátil: -> 💻\n"
+            ":teléfono_móvil: -> 📱\n"
+            ":cohete: -> 🚀\n"
+            ":corona: -> 👑\n"
+            ":regalo_empaquetado: -> 🎁\n"
+            ":bombilla: -> 💡\n"
+            ":candado_cerrado: -> 🔒\n"
+            ":llave: -> 🔑\n"
+            ":chincheta: -> 📌"
+        )
+        wx.MessageBox(mensaje_lista, "Lista de emojis")
 
     def cuando_enviar_mensaje(self, event):
         #Se ejecuta al pulsar Enter en la caja de texto
@@ -283,7 +365,7 @@ class MainFrame(wx.Frame):
             self.red_actual.enviar_al_servidor({
                 "accion": "enviar_mensaje",
                 "destino": self.sala_actual,
-                "texto": texto
+                "texto": emoji.emojize(texto, language='es')
             })
         else: 
             wx.MessageBox("No hay conexion con el servidor, no se puede enviar el mensaje", "error")

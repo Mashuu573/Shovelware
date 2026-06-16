@@ -2,9 +2,9 @@ import json
 import threading
 import websocket  
 import wx
-
+import emoji
 # Dirección del servidor
-DIRECCION_SERVIDOR = "ws://10.22.222.50:6789"
+DIRECCION_SERVIDOR = "ws://192.168.1.40:6789"
 
 
 class Acciones_Red:
@@ -74,7 +74,7 @@ class Acciones_Red:
 
         if destino == "General":
             sala = "General"
-            linea = f"{remitente}: {texto}\n"
+            linea = f"{remitente}: {emoji.emojize(texto, language='es')}\n"
         else:
             sala = (
                 remitente if remitente != self.ventana.mi_nombre else destino
@@ -82,7 +82,7 @@ class Acciones_Red:
             nombre_mostrar = (
                 "Tú" if remitente == self.ventana.mi_nombre else remitente
             )
-            linea = f"{nombre_mostrar}: {texto}\n"
+            linea = f"{nombre_mostrar}: {emoji.emojize(texto, language='es')}\n"
 
         if sala not in self.ventana.conversaciones:
             self.ventana.conversaciones[sala] = f"Chat Privado con {sala}\n"
