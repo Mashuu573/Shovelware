@@ -7,11 +7,11 @@ if ruta_modulos not in sys.path:
 
 import json
 import threading
-import websocket  
+import websocket
 import wx
 import emoji
 # Dirección del servidor
-DIRECCION_SERVIDOR = "ws://10.100.6.221:6789"
+DIRECCION_SERVIDOR = "ws://10.100.6.178:6789"
 
 
 class Acciones_Red:
@@ -50,7 +50,7 @@ class Acciones_Red:
 
         except Exception as error:
             wx.CallAfter(
-                self.ventana.area_mensajes.t, f"Error: {error}\n"
+                self.ventana.area_mensajes.AppendText, f"Error: {error}\n"
             )
 
     def enviar_al_servidor(self, datos):

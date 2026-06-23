@@ -386,7 +386,7 @@ class MainFrame(wx.Frame):
             wx.MessageBox("No hay conexion con el servidor, no se puede enviar el mensaje", "error")
     
     def splashArt(self):
-        splash_image = wx.Bitmap(r"C:\Users\maure\OneDrive\Desktop\Nueva carpeta (2)\Gemini_Generated_Image_5ngipu5ngipu5ngi.png", wx.BITMAP_TYPE_PNG) 
+        splash_image = wx.Bitmap(r"Shovelware\Gemini_Generated_Image_5ngipu5ngipu5ngi.png", wx.BITMAP_TYPE_PNG) 
         splash = wx.adv.SplashScreen(splash_image, wx.adv.SPLASH_CENTER_ON_SCREEN | wx.adv.SPLASH_TIMEOUT, 3000, None, -1)
         wx.Yield()
         
