@@ -1,6 +1,10 @@
 import wx 
 import red
 import emoji
+import wx.lib.colourchooser as cc
+import wx.adv
+from wx.lib.wordwrap import wordwrap
+
 # Estilo de la barra de herramientas
 ESTILO_TOOLBAR = wx.TB_VERTICAL | wx.NO_BORDER | wx.TB_FLAT
 
@@ -47,6 +51,7 @@ class MainFrame(wx.Frame):
     # Crear interfaz
     def crear_interfaz(self):
         #Construye toda la ventana por partes
+        self.splashArt()
         panel_izquierdo, panel_derecho = self.crear_paneles_divididos()
         self.crear_lista_contactos(panel_izquierdo)
         self.crear_area_chat(panel_derecho)
@@ -126,13 +131,13 @@ class MainFrame(wx.Frame):
         
         panel.SetSizer(organizador)
     
-
+    #Creo el status bar
     def crear_barra_estado(self):
         self.statusBar = self.CreateStatusBar(1)
         self.statusBar.SetStatusText("Iniciando reloj...")
     
     def iniciar_reloj(self):
-        self.timer_reloj = wx.Timer(self)
+        self.timer_reloj = wx.Timer(self) #Fijo un temporizador que se va a ir actualizando cada 1000 ms (1 segundo)
         self.Bind(wx.EVT_TIMER, self.actualizar_hora, self.timer_reloj)
         self.timer_reloj.Start(1000)
         self.actualizar_hora(None)
@@ -149,9 +154,8 @@ class MainFrame(wx.Frame):
         menu3 = wx.Menu()
         menu1.Append(101, "Agregar contacto")
         menu1.Append(102, "Eliminar contacto")
-        menu2.Append(201, "Mostrar informacion")
-        menu2.Append(203, "Mostrar lista emojis")
-        menu2.Append(202, "Acerca De")
+        menu2.Append(202, "Mostrar lista emojis")
+        menu2.Append(203, "Acerca De")
         menuBar.Append(menu1, "&Contactos")
         menuBar.Append(menu2, "&Informacion")
         self.SetMenuBar(menuBar)
@@ -159,9 +163,9 @@ class MainFrame(wx.Frame):
 
         self.Bind(wx.EVT_MENU, self.agregar_contacto, id=101)
         self.Bind(wx.EVT_MENU, self.eliminar_contacto, id=102)
-        self.Bind(wx.EVT_MENU, self.informacion, id=201)
-        self.Bind(wx.EVT_MENU, self.acercaDe, id=202)
-        self.Bind(wx.EVT_MENU, self.mostrarEmojiLista, id=203)
+        self.Bind(wx.EVT_MENU, self.mostrarEmojiLista, id=202)
+        self.Bind(wx.EVT_MENU, self.acercaDe, id=203)
+        
     
     
     def crear_toolbar(self):
@@ -187,7 +191,7 @@ class MainFrame(wx.Frame):
         # Conectar los botones con sus funciones
         self.Bind(wx.EVT_TOOL, self.agregar_contacto, btn_agregar)
         self.Bind(wx.EVT_TOOL, self.eliminar_contacto, btn_eliminar)
-        self.Bind(wx.EVT_TOOL, self.informacion, btn_informacion)
+        self.Bind(wx.EVT_TOOL, self.acercaDe, btn_informacion)
  
         
     #Acciones del usuario
@@ -229,7 +233,7 @@ class MainFrame(wx.Frame):
 
     def agregar_contacto(self, event):
         #Se ejecuta al pulsar el botón Agregar
-        dialogo = wx.TextEntryDialog(self, "Nombre del usuario:", "Agregar contacto")
+        dialogo = wx.TextEntryDialog(self, "Nombre del contacto:", "Agregar contacto")
         
         if dialogo.ShowModal() == wx.ID_OK:
             nombre = dialogo.GetValue().strip()
@@ -258,11 +262,6 @@ class MainFrame(wx.Frame):
 
 
 
-
-
-
-
-
     def eliminar_contacto(self, event):
         #Se ejecuta al pulsar el botón Eliminar
         if self.sala_actual == "General":
@@ -287,15 +286,24 @@ class MainFrame(wx.Frame):
             self.area_mensajes.SetValue(self.conversaciones["General"])
     
 
-
-    def informacion(self, event):
-        wx.MessageBox("Desarrollado por Torres Mauricio Ezequiel." \
-        "\nUniversidad Nacional de Pilar - 2026 - Programacion Orientada a Objetos", "Informacion")
-
     def acercaDe(self, event):
-        wx.MessageBox("Se utilizo codigo de internet para poder crear la estructura de servidor y un poco de red, se utilizo : \n" \
-        "stackoverflow y Reddit, ademas de algunas consultas a la IA para ver enfoques de estructuras ")
-
+        
+        info = wx.adv.AboutDialogInfo()
+        info.Name = "Shovelware"
+        info.Version = "4.3.6"
+        info.Copyright = "(c) 2026-2044 Programmer forever"
+        
+        info.Description = wordwrap(
+        "Universidad Nacional de Pilar - 2026 - Programacion Orientada a Objetos \
+        \nSe utilizo codigo de internet para poder crear la estructura de servidor y un poco de red, se utilizo: \
+        \nstackoverflow y Reddit, ademas de algunas consultas a la IA para ver enfoques de estructuras",350, wx.ClientDC(self))
+        info.WebSite = (
+            "https://github.com/Mashuu573/Shovelware", 
+            "Código Fuente | Licencia: https://www.gnu.org/licenses/gpl-3.0.html"
+        )
+        info.Developers = ["Torres Mauricio Ezequiel"]
+        info.License = wordwrap("https://www.gnu.org/licenses/gpl-3.0.html#license-text", 500, wx.ClientDC(self))
+        wx.adv.AboutBox(info)
     def mostrarEmojiLista(self, event):
         mensaje_lista = (
             "EXPRESIONES Y CARAS:\n"
@@ -370,8 +378,11 @@ class MainFrame(wx.Frame):
         else: 
             wx.MessageBox("No hay conexion con el servidor, no se puede enviar el mensaje", "error")
     
-    
-
+    def splashArt(self):
+        splash_image = wx.Bitmap(r"C:\Users\maure\OneDrive\Desktop\Nueva carpeta (2)\Gemini_Generated_Image_5ngipu5ngipu5ngi.png", wx.BITMAP_TYPE_PNG) 
+        splash = wx.adv.SplashScreen(splash_image, wx.adv.SPLASH_CENTER_ON_SCREEN | wx.adv.SPLASH_TIMEOUT, 3000, None, -1)
+        wx.Yield()
+        
 
 
 # Inicia el programa
