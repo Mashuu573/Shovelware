@@ -1,3 +1,10 @@
+import os 
+import sys
+
+ruta_modulos = os.path.join(os.path.dirname(__file__), 'modules')
+if ruta_modulos not in sys.path:
+    sys.path.insert(0, ruta_modulos)
+
 import wx 
 import red
 import emoji
