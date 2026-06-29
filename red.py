@@ -11,7 +11,7 @@ import websocket
 import wx
 import emoji
 # Dirección del servidor
-DIRECCION_SERVIDOR = "ws://10.100.6.178:6789"
+DIRECCION_SERVIDOR = "ws://192.168.1.40:6789"
 
 
 class Acciones_Red:
